@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        jeremykenedy\LaravelRoles\RolesServiceProvider::class,
 
         /*
          * Package Service Providers...
