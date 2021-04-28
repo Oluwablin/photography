@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
+use App\Models\Product;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -76,4 +77,28 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(Role::class);
     }
+
+    /**
+     * User has many Products.
+     *
+     * @return mixed
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+
+    // public function is($roleName)
+    // {
+    //     foreach ($this->roles()->get() as $role)
+    //     {
+    //         if ($role->name == $roleName)
+    //         {
+    //             return true;
+    //         }
+    //     }
+
+    //     return false;
+    // }
 }

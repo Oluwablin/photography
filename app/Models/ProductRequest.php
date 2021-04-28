@@ -10,6 +10,13 @@ class ProductRequest extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [''];
+
     //Relationships
     /**
      * Product Request belongs to a product.

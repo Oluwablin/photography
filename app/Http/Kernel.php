@@ -65,5 +65,7 @@ class Kernel extends HttpKernel
         'role' => \jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyRole::class,
         'permission' => \jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyPermission::class,
         'level' => \jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyLevel::class,
+        'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
+        'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
     ];
 }

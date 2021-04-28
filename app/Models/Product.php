@@ -6,10 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Photo;
 use App\Models\ProductRequest;
+use App\Models\User;
 
 class Product extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [''];
 
     //Relationships
     /**
@@ -30,5 +38,15 @@ class Product extends Model
     public function product_requests()
     {
         return $this->hasMany(ProductRequest::class);
+    }
+
+    /**
+     * Product belongs to a user.
+     *
+     * @return mixed
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
