@@ -89,16 +89,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
-    // public function is($roleName)
-    // {
-    //     foreach ($this->roles()->get() as $role)
-    //     {
-    //         if ($role->name == $roleName)
-    //         {
-    //             return true;
-    //         }
-    //     }
+    public function is($roleName)
+    {
+        foreach ($this->roles()->get() as $role)
+        {
+            if ($role->name == $roleName)
+            {
+                return true;
+            }
+        }
 
-    //     return false;
-    // }
+        return false;
+    }
 }
