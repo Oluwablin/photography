@@ -84,10 +84,32 @@ class ProductRequestTest extends TestCase
     public function it_can_see_a_request()
     {
         $this->withoutMiddleware();
-        $request = ProductRequest::factory()->count(2)->create();
-        $response = $this->get('/api/v1/product_request/fetch/one/{request}');
+        $user = User::factory()->create();
+        $role = Role::factory()->create();
+        $user->attachRole($role);
+        $this->actingAs($user, 'api');
+
+        $product = Product::factory()->create([
+            "name" => "Test Product",
+            "user_id" => $user->id,
+        ]);
+
+        $request = ProductRequest::factory()->create([
+            "name" => "Test Product Request",
+            "product_id" => $product->id,
+        ]);
+
+        $response = $this->get('/api/v1/product_request/fetch/one/' . $request->id, [], ['Accept' => 'application/json']);
+
         $response->assertStatus(200);
-        $response->decodeResponseJson($request);
+        $response->assertJson([
+            "error" => false,
+            "message" => null,
+            "data" => [
+                "name" => "Test Product Request",
+                "product_id" => $product->id,
+            ],
+        ]);
     }
 
     /** @test to see all requests*/
@@ -95,13 +117,30 @@ class ProductRequestTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $user->is('product.owner');
+        $role = Role::factory()->create([
+            'name' => 'Photographer',
+            "slug" => "photographer",
+            "description" => "Photographer role",
+            "level" => 4,
+        ]);
+        //dd($role);
+        $user->attachRole($role);
         $this->actingAs($user, 'api');
 
-        $request = ProductRequest::factory()->count(2)->create();
-        $response = $this->get('/api/v1/product_request/fetch/all');
+        $product = Product::factory()->create([
+            "name" => "Test Product",
+            "user_id" => $user->id,
+        ]);
+
+        $request = ProductRequest::factory()->create([
+            "name" => "Test Product Request",
+            "product_id" => $product->id,
+            "photo_taken" => 0,
+        ]);
+
+        $response = $this->get('/api/v1/product_request/fetch/all?page=1', ['Accept' => 'application/json']);
         $response->assertStatus(200);
-        $response->decodeResponseJson($request);
+        $response->assertJsonFragment(['current_page' => 1]);
     }
 
     /** @test to update all requests*/
@@ -109,13 +148,38 @@ class ProductRequestTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $user->is('product.owner');
+        $role = Role::factory()->create();
+        $user->attachRole($role);
         $this->actingAs($user, 'api');
 
-        $request = ProductRequest::factory()->count(2)->create();
-        $response = $this->put('/api/v1/product_request/update/{request}');
+        $product = Product::factory()->create([
+            "name" => "Test Product",
+            "user_id" => $user->id,
+        ]);
+
+        $request = ProductRequest::factory()->create([
+            "name" => "Test Product Request",
+            "product_id" => $product->id,
+            "photo_taken" => 0,
+        ]);
+
+        $updatedRequest = [
+            'name' => 'Updated Product Request',
+            "product_id" => $product->id,
+            "photo_taken" => 0,
+        ];
+
+        $response = $this->put('/api/v1/product_request/update/{$request->id}', $updatedRequest, ['Accept' => 'application/json']);
         $response->assertStatus(200);
-        $response->decodeResponseJson($request);
+        $response->assertJson([
+            "error" => false,
+            "message" => 'Request updated successfully',
+            "data" => [
+                'name' => 'Updated Product Request',
+            "product_id" => $product->id,
+            "photo_taken" => 0,
+            ],
+        ]);
     }
 
     /** @test to update all requests*/
@@ -123,13 +187,24 @@ class ProductRequestTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $user->is('product.owner');
+        $role = Role::factory()->create();
+        $user->attachRole($role);
         $this->actingAs($user, 'api');
 
-        $request = ProductRequest::factory()->count(2)->create();
-        $response = $this->delete('/api/v1/product_request/delete/{request}');
-        $response->assertStatus(200);
-        $response->decodeResponseJson($request);
+        $product = Product::factory()->create([
+            "name" => "Test Product",
+            "user_id" => $user->id,
+        ]);
+
+        $request = ProductRequest::factory()->create([
+            "name" => "Test Product Request",
+            "product_id" => $product->id,
+            "photo_taken" => 0,
+        ]);
+
+        $response = $this->delete('/api/v1/product_request/delete/{productRequest}', [], ['Accept' => 'application/json']);
+        $response->assertStatus(204);
+        $this->assertCount(0, ProductRequest::all());
     }
 
 }

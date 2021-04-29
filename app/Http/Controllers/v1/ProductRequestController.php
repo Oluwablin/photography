@@ -135,7 +135,7 @@ class ProductRequestController extends Controller
     //DISPLAY A PRODUCT REQUEST
     public function show(ProductRequest $productRequest)
     {
-        $requests = ProductRequest::with('product')->find($productRequest);
+        $requests = $productRequest->with('product')->first();
         if (!$requests) {
             return response()->json([
                 "error" => true,
@@ -259,7 +259,7 @@ class ProductRequestController extends Controller
                 ]);
             }
 
-            $requests = ProductRequest::find($productRequest)->where('product_id', $product->id)->first();
+            $requests = $productRequest->where('product_id', $product->id)->first();
             if (!$requests) {
                 return response()->json([
                     "error" => true,

@@ -80,10 +80,20 @@ class ProductOwnerTest extends TestCase
         $user->attachRole($role);
         $this->actingAs($user, 'api');
 
-        $product = Product::factory()->count(2)->create();
-        $response = $this->get('/api/v1/product/fetch/one/{product}');
+        $product = Product::factory()->create([
+            "name" => "Test Product",
+            "user_id" => $user->id,
+        ]);
+        $response = $this->get('/api/v1/product/fetch/one/' . $product->id, [], ['Accept' => 'application/json']);
         $response->assertStatus(200);
-        $response->decodeResponseJson($product);
+        $response->assertJson([
+            "error" => false,
+            "message" => '',
+            "data" => [
+                "name" => "Test Product",
+                "user_id" => $user->id,
+            ],
+        ]);
     }
 
     /** @test to see all products*/
@@ -91,13 +101,19 @@ class ProductOwnerTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $user->is('product.owner');
+        $role = Role::factory()->create();
+        $user->attachRole($role);
         $this->actingAs($user, 'api');
 
-        $product = Product::factory()->count(2)->create();
-        $response = $this->get('/api/v1/product/fetch/all');
+        $product = Product::factory()->create([
+            "name" => "Test Product",
+            "user_id" => $user->id,
+        ]);
+
+        $response = $this->get('/api/v1/product/fetch/all?page=1', ['Accept' => 'application/json']);
         $response->assertStatus(200);
-        $response->decodeResponseJson($product);
+        $response->assertJsonFragment(['current_page' => 1]);
+
     }
 
     /** @test to update all products*/
@@ -146,10 +162,9 @@ class ProductOwnerTest extends TestCase
             ]
         );
 
-        $response = $this->delete('/api/v1/product/delete/{product}', [], ['Accept' => 'application/json']);
+        $response = $this->delete('/api/v1/product/delete/{$product->id}', [], ['Accept' => 'application/json']);
         $response->assertStatus(204);
-        $response->decodeResponseJson($product);
-        //$this->assertCount(0, Product::all());
+        $this->assertCount(0, Product::all());
     }
 
     /** @test to seed database*/

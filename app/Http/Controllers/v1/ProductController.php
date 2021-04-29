@@ -114,7 +114,7 @@ class ProductController extends Controller
     //DISPLAY A PRODUCT
     public function show(Product $product)
     {
-        $products = Product::with('user')->find($product)->where('user_id', Auth::id())->first();
+        $products = $product->with('user')->where('user_id', Auth::id())->first();
         if (!$products) {
             return response()->json([
                 "error" => true,
@@ -193,7 +193,7 @@ class ProductController extends Controller
     //DELETE A PRODUCT
     public function destroy(Product $product)
     {
-        $products = Product::find($product)->where('user_id', Auth::id())->first();
+        $products = $product->where('user_id', Auth::id())->first();
         if (!$products) {
             return response()->json([
                 "error" => true,
