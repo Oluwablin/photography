@@ -73,7 +73,7 @@ class ProductController extends Controller
                 'error'=> true,
                 'message'=> 'Product name is required.',
                 'data' => null
-            ]);
+            ], 422);
         }
         if(Auth::user()->hasRole('product.owner')){
             DB::beginTransaction();
@@ -162,10 +162,10 @@ class ProductController extends Controller
                 'error'=> true,
                 'message'=> 'Product name is required.',
                 'data' => null
-            ]);
+            ], 422);
         }
 
-        $products = Product::find($product)->where('user_id', Auth::id())->first();
+        $products = $product->where('user_id', Auth::id())->first();
         if (!$products) {
             return response()->json([
                 "error" => true,
@@ -206,6 +206,6 @@ class ProductController extends Controller
             "error" => false,
             "message" => 'Product deleted successfully',
             "data" => null
-        ]);
+        ], 204);
     }
 }

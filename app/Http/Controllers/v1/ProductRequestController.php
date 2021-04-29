@@ -74,7 +74,7 @@ class ProductRequestController extends Controller
                 'error'=> true,
                 'message'=> 'Request name is required.',
                 'data' => null
-            ]);
+            ], 422);
         }
 
         $validatorEmployee = Validator::make($credentials, $rules[1]);
@@ -83,7 +83,7 @@ class ProductRequestController extends Controller
                 'error'=> true,
                 'message'=> 'Product id is required.',
                 'data' => null
-            ]);
+            ], 422);
         }
 
         if(Auth::user()->hasRole('product.owner')){
@@ -208,7 +208,7 @@ class ProductRequestController extends Controller
                 ]);
             }
 
-            $requests = ProductRequest::find($productRequest)->where('product_id', $product->id)->first();
+            $requests = $productRequest->where('product_id', $product->id)->first();
 
             if (!$requests) {
                 return response()->json([
@@ -273,7 +273,7 @@ class ProductRequestController extends Controller
                 "error" => false,
                 "message" => 'Request deleted successfully',
                 "data" => null
-            ]);
+            ], 204);
         }else{
             DB::rollback();
             return response()->json([

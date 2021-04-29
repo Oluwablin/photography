@@ -24,7 +24,7 @@ class RoleFactory extends Factory
     {
         $title = 'Product Owner';
         $slug = Str::slug($title, '.');
-        $description = Str::slug($title . ' role');
+        $description = $title . ' role';
 
         return [
             'name' => $title,
