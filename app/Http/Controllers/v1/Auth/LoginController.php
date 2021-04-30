@@ -64,7 +64,7 @@ class LoginController extends Controller
                 'error' => true,
                 'message' => 'You have not yet registered on this platform',
                 'data' => null
-            ]);
+            ], 401);
         }
 
 
@@ -81,7 +81,7 @@ class LoginController extends Controller
                 'error' => true,
                 'message' => 'You are no longer active on this platform',
                 'data' => null
-            ]);
+            ], 401);
         }
 
         $data = [
@@ -107,10 +107,22 @@ class LoginController extends Controller
      */
     public function me()
     {
+        try {
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+        } catch (TokenExpiredException $e) {
+            return response()->json(['token_expired'], $e->getStatusCode());
+        } catch (TokenInvalidException $e) {
+            return response()->json(['token_invalid'], $e->getStatusCode());
+        } catch (JWTException $e) {
+            return response()->json(['token_absent'], $e->getStatusCode());
+        }
+
         return response()->json([
             'error' => false,
             'message' => null,
-            'data' => Auth::user()
+            'data' => $user
         ]);
     }
 

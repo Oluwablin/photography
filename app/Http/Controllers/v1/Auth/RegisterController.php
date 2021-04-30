@@ -47,7 +47,7 @@ class RegisterController extends Controller
                 'error'=> true,
                 'message'=> 'Firstname is required.',
                 'data' => null
-            ]);
+            ], 422);
         }
 
         $validatorName = Validator::make($credentials, $rules[1]);
@@ -56,7 +56,7 @@ class RegisterController extends Controller
                 'error'=> true,
                 'message'=> 'Lastname is required.',
                 'data' => null
-            ]);
+            ], 422);
         }
 
         $validatorEmail = Validator::make($credentials, $rules[2]);
@@ -65,7 +65,7 @@ class RegisterController extends Controller
                 'error'=> true,
                 'message'=> 'Email is required.',
                 'data' => null
-            ]);
+            ], 422);
         }
 
         $validatorRole = Validator::make($credentials, $rules[3]);
@@ -74,7 +74,7 @@ class RegisterController extends Controller
                 'error'=> true,
                 'message'=> 'User role is required.',
                 'data' => null
-            ]);
+            ], 422);
         }
 
         $validatorPassword = Validator::make($credentials, $rules[4]);
@@ -141,7 +141,7 @@ class RegisterController extends Controller
                 'error'=> true,
                 'message'=> 'User was not created',
                 'data' => null
-            ]);
+            ], 422);
         }
 
     }
