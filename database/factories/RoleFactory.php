@@ -22,7 +22,7 @@ class RoleFactory extends Factory
      */
     public function definition()
     {
-        $title = 'Product Owner';
+        $title = $this->faker->unique()->word(2);
         $slug = Str::slug($title, '.');
         $description = $title . ' role';
 

@@ -67,9 +67,9 @@ Route::group(['prefix' => 'v1'], function ($router) {
 
         Route::group(['prefix' => 'photo'], function () {
             Route::get('fetch/all', 							'v1\PhotoController@index');
-            Route::get('fetch/one/{photo}', 					'v1\PhotoController@show');
+            Route::post('approve', 					'v1\PhotoController@approve');
             Route::post('add/new', 						'v1\PhotoController@store');
-            Route::put('update/{photo}', 						'v1\PhotoController@update');
+            Route::post('reject', 						'v1\PhotoController@reject');
             Route::delete('delete/{photo}', 					'v1\PhotoController@destroy');
         });
 

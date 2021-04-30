@@ -31,12 +31,17 @@ class ProductRequestTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test it cannot create a product without payload*/
+    /** @test it cannot create a request without payload*/
     public function it_does_not_create_a_product_request_without_payload ()
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $role = Role::factory()->create();
+        $role = Role::factory()->create([
+            'name' => 'Product Owner',
+            "slug" => "product.owner",
+            "description" => "Product Owner Role",
+            "level" => 4,
+        ]);
         $product = Product::factory()->create();
         $user->attachRole($role);
         $this->actingAs($user, 'api');
@@ -52,7 +57,12 @@ class ProductRequestTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $role = Role::factory()->create();
+        $role = Role::factory()->create([
+            'name' => 'Product Owner',
+            "slug" => "product.owner",
+            "description" => "Product Owner Role",
+            "level" => 4,
+        ]);
         $user->attachRole($role);
         $this->actingAs($user, 'api');
 
@@ -120,10 +130,9 @@ class ProductRequestTest extends TestCase
         $role = Role::factory()->create([
             'name' => 'Photographer',
             "slug" => "photographer",
-            "description" => "Photographer role",
+            "description" => "Photographer Role",
             "level" => 4,
         ]);
-        //dd($role);
         $user->attachRole($role);
         $this->actingAs($user, 'api');
 
@@ -148,7 +157,12 @@ class ProductRequestTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $role = Role::factory()->create();
+        $role = Role::factory()->create([
+            'name' => 'Product Owner',
+            "slug" => "product.owner",
+            "description" => "Product Owner Role",
+            "level" => 4,
+        ]);
         $user->attachRole($role);
         $this->actingAs($user, 'api');
 
@@ -187,7 +201,12 @@ class ProductRequestTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $role = Role::factory()->create();
+        $role = Role::factory()->create([
+            'name' => 'Product Owner',
+            "slug" => "product.owner",
+            "description" => "Product Owner Role",
+            "level" => 4,
+        ]);
         $user->attachRole($role);
         $this->actingAs($user, 'api');
 

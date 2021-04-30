@@ -50,7 +50,12 @@ class ProductOwnerTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $role = Role::factory()->create();
+        $role = Role::factory()->create([
+            'name' => 'Product Owner',
+            "slug" => "product.owner",
+            "description" => "Product Owner Role",
+            "level" => 4,
+        ]);
         $user->attachRole($role);
         $this->actingAs($user, 'api');
 
@@ -101,7 +106,12 @@ class ProductOwnerTest extends TestCase
     {
         $this->withoutMiddleware();
         $user = User::factory()->create();
-        $role = Role::factory()->create();
+        $role = Role::factory()->create([
+            'name' => 'Product Owner',
+            "slug" => "product.owner",
+            "description" => "Product Owner Role",
+            "level" => 4,
+        ]);
         $user->attachRole($role);
         $this->actingAs($user, 'api');
 
@@ -168,10 +178,10 @@ class ProductOwnerTest extends TestCase
     }
 
     /** @test to seed database*/
-    public function test_roles_and_permissions_are_seeded()
-    {
-        // Run the DatabaseSeeder...
-        $this->seed();
+    // public function test_roles_and_permissions_are_seeded()
+    // {
+    //     // Run the DatabaseSeeder...
+    //     $this->seed();
 
-    }
+    // }
 }
